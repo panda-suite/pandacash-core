@@ -1,21 +1,22 @@
+import { IPandaCashCoreOpts } from "../interfaces";
+
 const bcash = require('bcash');
 const walletPlugin = require('bcash/lib/wallet/plugin');
 
+type FullNode = any;
 const FullNode = bcash.FullNode;
 
-let node;
+let node: FullNode;
 
 // example: https://github.com/bcoin-org/bcash/blob/master/bin/node
-const startNode = (opts) => new Promise((resolve, reject) => {
+const startNode = (opts: IPandaCashCoreOpts) => new Promise((resolve, reject) => {
     if (node) {
-        return console.log("Node is already initialized.");
+        return reject("Node is already initialized.");
     }
 
     const fullNodeOpts = {
         file: true,
         argv: true,
-        env: true,
-
         // port for the RPC server
         "http-port": opts.port,
         env: {

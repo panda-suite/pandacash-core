@@ -1,23 +1,19 @@
 {
-  "name": "pandacash-cli",
-  "version": "0.4.1",
-  "description": "Fast Bitcoin Cash RPC client for testing and development (inspired by ganache-cli)",
-  "main": "index.js",
+  "name": "pandacash-core",
+  "version": "0.1.0",
+  "description": "Core code for pandacash",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "node index.js",
-    "start:debug": "node index.js --debug"
-  },
-  "bin": {
-    "pandacash-cli": "index.js"
+    "build": "node ./node_modules/gulp/bin/gulp.js && ./node_modules/typescript/bin/tsc"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/panda-suite/pandacash-cli.git"
+    "url": "git+https://github.com/panda-suite/pandacash-core.git"
   },
   "author": "Pandas",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/panda-suite/pandacash-cli/issues"
+    "url": "https://github.com/panda-suite/pandacash-core/issues"
   },
   "keywords": [
     "bitcoin",
@@ -46,17 +42,17 @@
       "name": "Gabriel Cardona"
     }
   ],
-  "homepage": "https://github.com/panda-suite/pandacash-cli#readme",
+  "homepage": "https://github.com/panda-suite/pandacash-core#readme",
   "dependencies": {
     "bcash": "^1.0.2",
     "bchjs": "0.1.0-alpha.2",
-    "bitbox-sdk": "^2.1.1",
-    "chalk": "^2.4.1",
-    "clear": "^0.1.0",
-    "curl": "^0.1.4",
-    "figlet": "^1.2.1",
-    "node-fetch": "^2.2.0",
-    "yargs": "^12.0.2"
+    "bitbox-sdk": "^2.1.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/node": "^10.12.2",
+    "gulp": "^3.9.1",
+    "gulp-clean": "^0.4.0",
+    "run-sequence": "^2.2.1",
+    "typescript": "^3.1.6"
+  }
 }

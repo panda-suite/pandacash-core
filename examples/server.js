@@ -1,4 +1,4 @@
-const panda = require("../index");
+const panda = require("../dist/index");
 
 const server = panda.server({
     enableLogs: false

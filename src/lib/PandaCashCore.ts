@@ -1,8 +1,9 @@
 const { hd, KeyRing } = require('bcash');
 const bchNode = require('./bchNode');
-const { Web3BCH, HttpProvider } = require('bchjs');
+import { Web3BCH, HttpProvider } from "bchjs";
+import { IAccount, IPandaCashCoreOpts, IPandaCashCore } from "../interfaces";
 
-const sleep = (ms) => {
+const sleep = (ms: number) => {
   return new Promise(resolve => {
     setTimeout(resolve, ms);
   });
@@ -10,8 +11,9 @@ const sleep = (ms) => {
 
 const BITBOXSDK = require('bitbox-sdk/lib/bitbox-sdk');
 const BITBOX = new BITBOXSDK.default();
-class PandaCashCore {
-  constructor(opts) {
+
+export default class PandaCashCore implements IPandaCashCore {
+  constructor(private opts: IPandaCashCoreOpts) {
     this.opts = {
       mnemonic: opts.mnemonic || PandaCashCore.generateSeedMnemonic(),
       totalAccounts: opts.totalAccounts || 10,
@@ -32,22 +34,27 @@ class PandaCashCore {
     this.accounts = PandaCashCore.generateSeedKeyPairs(this.opts.mnemonic, this.opts.totalAccounts);
   }
 
+  public nodeRPC: any;
+  public walletNodeRPC: any;
+  public accounts: IAccount[] = [];
+  public bchNode: any;
+
   static get HDPath() {
-    return "m/44'/1/0/0/"
+    return "m/44'/1/0/0/";
   }
 
-  static generateSeedKeyPairs(mnemonic, totalAccounts) {
-    const accounts = [];
+  static generateSeedKeyPairs(mnemonic: string, totalAccounts: number): IAccount[] {
+    const accounts: IAccount[] = [];
     const { HDPrivateKey } = hd;
     const privateKey = HDPrivateKey.fromPhrase(mnemonic);
 
     for (var index = 0; index < totalAccounts; index++) {
       const deriveSomething = privateKey.derivePath(PandaCashCore.HDPath + index);
       const ring = KeyRing.fromPrivate(deriveSomething.privateKey);
-      const account = {};
-
-      account.address = ring.getAddress('string', 'regtest');
-      account.privateKeyWIF = ring.toSecret('regtest');
+      const account: IAccount = {
+        address: ring.getAddress('string', 'regtest'),
+        privateKeyWIF: ring.toSecret('regtest')
+      };
 
       accounts.push(account);
     }
@@ -55,7 +62,7 @@ class PandaCashCore {
     return accounts;
   }
 
-  static generateSeedMnemonic() {
+  static generateSeedMnemonic() : string {
     return BITBOX.Mnemonic.generate(128);
   }
 
@@ -128,7 +135,7 @@ class PandaCashCore {
   }
   */
 
-  printPandaMessage(detailedVersion) {
+  printPandaMessage(detailedVersion: string) {
     console.log(`
       ${detailedVersion}
 
@@ -162,5 +169,3 @@ class PandaCashCore {
      */
   }
 }
-
-module.exports = PandaCashCore;
