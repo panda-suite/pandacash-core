@@ -1,6 +1,6 @@
 # Pandacash Core
 
-This is the core code that powers the Pandacash application and the the Pandacash command line tool - [`pandacash-cli`](https://github.com/pandacash-suite/pandacash-cli).
+This is the core code that powers the Pandacash application and the the Pandacash command line tool - [`pandacash-cli`](https://github.com/panda-suite/pandacash-cli).
 
 ## Prerequisites
 To run `pandacash-cli`, make sure that [Node.js](https://nodejs.org/) is installed.
