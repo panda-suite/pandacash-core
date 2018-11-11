@@ -44,6 +44,14 @@ const server = panda.server({
         .to(address, 15000)
         .sign(privateKey);
     
+    try {
+        const a = await pandaCashCore.walletNodeRPC.listunspent(0, 20, [ pandaCashCore.accounts[0].address ]);
+        console.log(a);
+    } catch (err) {
+        console.error(err);
+    }
+    
+
     console.log(transaction);
 
     // console.log(txid);
