@@ -12,6 +12,9 @@ var PandaKeyPair = /** @class */ (function () {
             address: ring.getAddress('string', 'regtest'),
             privateKey: ring.toSecret('regtest')
         };
+        /*
+         * testnet and regtest have the same prefixes in bitcoincashjs!
+         */
         var bchPrivateKey = new bch.PrivateKey(ring.getPrivateKey('hex'), "testnet");
         this.standard = {
             address: bchPrivateKey.toAddress().toString(),
