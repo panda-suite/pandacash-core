@@ -5,18 +5,22 @@ const pkg = require('../package.json');
 
 const detailedVersion = `Pandacash CLI v${pkg.version}`;
 
-const _listen = (opts: IPandaCashCoreOpts, cb: (err: any, panda: PandaCashCore) => void) => {
+const _listen = async (opts: IPandaCashCoreOpts, cb: (err: any, panda: PandaCashCore) => void): Promise<PandaCashCore> => {
   const pandaCashCore = new PandaCashCore(opts);
 
-  pandaCashCore.startNode()
-  .then(() => pandaCashCore.seedAccounts())
-  .then(() => {
-    if (opts.enableLogs) {
-      pandaCashCore.printPandaMessage(detailedVersion);
-    }
+  await pandaCashCore.startNode();
 
-    cb && cb(undefined, pandaCashCore);
-  })
+  await pandaCashCore.seedAccounts();
+
+  if (opts.enableLogs) {
+    pandaCashCore.printPandaMessage(detailedVersion);
+  }
+
+  if (cb) {
+    cb(undefined, pandaCashCore);
+  }
+
+  return Promise.resolve(pandaCashCore);
 };
 
 /**
@@ -24,7 +28,7 @@ const _listen = (opts: IPandaCashCoreOpts, cb: (err: any, panda: PandaCashCore) 
  */
 export const server = (opts: IPandaServerOpts) : IPandaServer => {
   return {
-    listen: (portOpts, cb) => {
+    listen: async (portOpts, cb): Promise<PandaCashCore> => {
       if (typeof portOpts === "number") {
         opts.port = portOpts;
       } else {
@@ -32,7 +36,7 @@ export const server = (opts: IPandaServerOpts) : IPandaServer => {
         opts.walletPort = portOpts.walletPort;
       }
 
-      _listen(opts, cb);
+      return await _listen(opts, cb);
     }
   }
 };

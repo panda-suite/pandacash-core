@@ -50,6 +50,7 @@
   },
   "devDependencies": {
     "@types/node": "^10.12.2",
+    "bitcoincashjs": "^0.1.10",
     "gulp": "^3.9.1",
     "gulp-clean": "^0.4.0",
     "run-sequence": "^2.2.1",

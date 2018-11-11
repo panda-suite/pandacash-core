@@ -31,18 +31,16 @@ const server = panda.server({
     debug: false
 });
 
-server.listen({
-  port: 48332
-  walletPort: 48334
-}, (err, pandaCashCore) => {
-    if (err) {
-        return console.error(err);
-    }
-
+(async () => {
+    const pandaCashCore = await server.listen({
+        port: 48332
+        walletPort: 48334
+    });
+    
     console.log("Mnemonic: " + pandaCashCore.opts.mnemonic);
     console.log("Account[0] public key: " + pandaCashCore.accounts[0].address);
     console.log("Account[0] private key: " + pandaCashCore.accounts[0].privateKeyWIF);
-});
+})();
 ```
 
 **In Jasmine/Mocha tests**
@@ -55,11 +53,18 @@ beforeAll(done => {
     debug: false
   })
 
-  server.listen(48332, (err, pandaCashCore) => {
-    if (err) done(err);
+  (async () => {
+    try {
+      await server.listen({
+        port: 48332
+        walletPort: 48334
+      });
+    } catch (err) {
+      return done(err);
+    }
 
-    done()
-  })
+    done();
+  })();
 });
 ```
 
