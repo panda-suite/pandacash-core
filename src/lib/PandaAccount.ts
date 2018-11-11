@@ -19,7 +19,9 @@ class PandaKeyPair {
           privateKey: ring.toSecret('regtest')
         };
 
-
+        /*
+         * testnet and regtest have the same prefixes in bitcoincashjs! 
+         */
         const bchPrivateKey = new bch.PrivateKey(ring.getPrivateKey('hex'), "testnet");
 
         this.standard = {

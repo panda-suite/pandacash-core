@@ -31,16 +31,20 @@ const server = panda.server({
     debug: false
 });
 
-(async () => {
-    const pandaCashCore = await server.listen({
-        port: 48332
-        walletPort: 48334
-    });
-    
-    console.log("Mnemonic: " + pandaCashCore.opts.mnemonic);
-    console.log("Account[0] public key: " + pandaCashCore.accounts[0].address);
-    console.log("Account[0] private key: " + pandaCashCore.accounts[0].privateKeyWIF);
-})();
+const pandaCashCore = await server.listen({
+    port: 48332,
+    walletPort: 48334
+});
+
+console.log("Mnemonic: " + pandaCashCore.opts.mnemonic);
+
+// addresses compatible with bcash
+console.log("Account[0] public key (bcash format): " + pandaCashCore.account.keyPairs[0].bcash.address);
+console.log("Account[0] private key (bcash format): " + pandaCashCore.account.keyPairs[0].bcash.privateKey);
+
+// addresses compatible with bitcashjs and other libraries
+console.log("Account[0] public key (standard format): " + pandaCashCore.account.keyPairs[0].standard.address);
+console.log("Account[0] private key (standard format): " + pandaCashCore.account.keyPairs[0].standard.privateKey);
 ```
 
 **In Jasmine/Mocha tests**
@@ -77,12 +81,12 @@ const { Web3BCH, HttpProvider } = require('bchjs');
 
 const server = panda.server();
 
-server.listen({ port: 48334, walletPort: 48335 }, (err) => {
-    const web3bchNode = new Web3BCH(new HttpProvider('http://localhost:48334'));
-    const web3bchWallet = new Web3BCH(new HttpProvider('http://localhost:48335'));
+await server.listen({ port: 48334, walletPort: 48335 });
 
-    await web3bchNode.rpc.getblockchaininfo();
-});
+const web3bchNode = new Web3BCH(new HttpProvider('http://localhost:48334'));
+const web3bchWallet = new Web3BCH(new HttpProvider('http://localhost:48335'));
+
+await web3bchNode.rpc.getblockchaininfo();
 ```
 
 ## Under the hood

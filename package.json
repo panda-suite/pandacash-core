@@ -22,6 +22,7 @@
     "bitcoincash",
     "btc",
     "bch",
+    "rpc",
     "ganache-cli",
     "devtools",
     "blockchain",
