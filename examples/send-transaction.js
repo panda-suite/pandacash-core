@@ -1,5 +1,6 @@
 const bch = require('bitcoincashjs');
 const panda = require("../dist/index");
+const { hd, KeyRing } = require('bcash');
 
 const server = panda.server({
     seedAccounts: true,
@@ -18,22 +19,34 @@ const server = panda.server({
     
     const _utxo = unspentTxs[0];
     
-    const privateKey = new bch.PrivateKey(pandaCashCore.accounts[0].privateKeyWIF, "regtest");
+    const balance = await pandaCashCore.walletNodeRPC.getbalance();
+    
+    const ring = KeyRing.fromSecret(pandaCashCore.accounts[0].privateKeyWIF, 'regtest');
+
+    // regtest and test net are the same!
+    const privateKey = new bch.PrivateKey(ring.getPrivateKey('hex'), "testnet");
+    const address = (new bch.PrivateKey(ring.getPrivateKey('hex'), "testnet")).toAddress().toString();
+    
+    console.log(address);
+    console.log(privateKey);
+    console.log(balance);
 
     const utxo = {
-        'txId' : _utxo.txId,
+        'txId' : _utxo.txid,
         'outputIndex' : 0,
-        'address' : _utxo.address,
+        'address' : address,
         'script' : _utxo.scriptPubKey,
         'satoshis' : 50000
     };
 
     const transaction = new bch.Transaction()
         .from(utxo)
-        .to(pandaCashCore.accounts[1].address, 15000)
+        .to(address, 15000)
         .sign(privateKey);
-
+    
     console.log(transaction);
+
+    // console.log(txid);
 
     process.exit();
 })();
