@@ -1,5 +1,5 @@
 import PandaCashCore from './lib/PandaCashCore';
-import { IAccount, IPandaCashCoreOpts, IPandaCashCore, IPandaServerOpts, IPandaServer } from "./interfaces";
+import { IPandaCashCoreOpts, IPandaServerOpts, IPandaServer } from "./interfaces";
 
 const pkg = require('../package.json');
 

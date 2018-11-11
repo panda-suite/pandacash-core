@@ -37,6 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var _a = require('bcash'), hd = _a.hd, KeyRing = _a.KeyRing;
 var bchNode = require('./bchNode');
+var PandaAccount_1 = require("./PandaAccount");
 var bchjs_1 = require("bchjs");
 var sleep = function (ms) {
     return new Promise(function (resolve) {
@@ -59,6 +60,7 @@ var PandaCashCore = /** @class */ (function () {
         };
         this.nodeRPC = (new bchjs_1.Web3BCH(new bchjs_1.HttpProvider("http://127.0.0.1:" + this.opts.port, 'regtest', 'regtest'))).rpc;
         this.walletNodeRPC = (new bchjs_1.Web3BCH(new bchjs_1.HttpProvider("http://127.0.0.1:" + this.opts.walletPort, 'regtest', 'regtest'))).rpc;
+        this.account = new PandaAccount_1.default(this.opts.mnemonic, this.opts.totalAccounts);
         this.accounts = PandaCashCore.generateSeedKeyPairs(this.opts.mnemonic, this.opts.totalAccounts);
     }
     Object.defineProperty(PandaCashCore, "HDPath", {

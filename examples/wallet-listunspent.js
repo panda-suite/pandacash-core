@@ -1,4 +1,3 @@
-const bch = require('bitcoincashjs');
 const panda = require("../dist/index");
 
 const server = panda.server({
@@ -7,14 +6,13 @@ const server = panda.server({
     debug: false
 });
 
-
 (async () => {
     const pandaCashCore = await server.listen({
         port: 8081,
         walletPort: 8082
     });
-    
-    const unspentTxs = await pandaCashCore.walletNodeRPC.listunspent(0, 20, [ pandaCashCore.accounts[0].address ]);
+
+    const unspentTxs = await pandaCashCore.walletNodeRPC.listunspent(0, 20, [ pandaCashCore.account.keyPairs[0].bcash.address ]);
 
     console.log(unspentTxs);
 

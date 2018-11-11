@@ -4,6 +4,8 @@
   "description": "Core code for pandacash",
   "main": "dist/index.js",
   "scripts": {
+    "mocha": "./node_modules/.bin/mocha",
+    "test": "npm run build && npm run mocha",
     "build": "node ./node_modules/gulp/bin/gulp.js && ./node_modules/typescript/bin/tsc"
   },
   "repository": {
@@ -53,6 +55,7 @@
     "bitcoincashjs": "^0.1.10",
     "gulp": "^3.9.1",
     "gulp-clean": "^0.4.0",
+    "mocha": "^5.2.0",
     "run-sequence": "^2.2.1",
     "typescript": "^3.1.6"
   }

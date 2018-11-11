@@ -1,5 +1,6 @@
 const { hd, KeyRing } = require('bcash');
 const bchNode = require('./bchNode');
+import PandaAccount from "./PandaAccount";
 import { Web3BCH, HttpProvider } from "bchjs";
 import { IAccount, IPandaCashCoreOpts, IPandaCashCore } from "../interfaces";
 
@@ -31,11 +32,14 @@ export default class PandaCashCore implements IPandaCashCore {
       new HttpProvider(`http://127.0.0.1:${this.opts.walletPort}`, 'regtest', 'regtest')
     )).rpc;
 
+    this.account = new PandaAccount(this.opts.mnemonic, this.opts.totalAccounts);
+
     this.accounts = PandaCashCore.generateSeedKeyPairs(this.opts.mnemonic, this.opts.totalAccounts);
   }
 
   public nodeRPC: any;
   public walletNodeRPC: any;
+  public account: PandaAccount;
   public accounts: IAccount[] = [];
   public bchNode: any;
 

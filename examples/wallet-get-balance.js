@@ -6,25 +6,16 @@ const server = panda.server({
     debug: false
 });
 
-server.listen({
-    port: 8081,
-    walletPort: 8082
-}, (err, pandaCashCore) => {
-    if (err) {
-        return console.error(err);
-    }
 
-    pandaCashCore
-    .walletNodeRPC
-    .getbalance()
-    .then(result => {
-        console.log("WALLET BALANCE: " + result);
+(async () => {
+    const pandaCashCore = await server.listen({
+        port: 8081,
+        walletPort: 8082
+    });
 
-        process.exit();
-    })
-    .catch(err => {
-        console.log(err);
+    const balance = await pandaCashCore.walletNodeRPC.getbalance();
 
-        process.exit();
-    })
-});
+    console.log(balance);
+
+    process.exit();
+})();

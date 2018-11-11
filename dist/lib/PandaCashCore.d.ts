@@ -1,9 +1,11 @@
+import PandaAccount from "./PandaAccount";
 import { IAccount, IPandaCashCoreOpts, IPandaCashCore } from "../interfaces";
 export default class PandaCashCore implements IPandaCashCore {
     private opts;
     constructor(opts: IPandaCashCoreOpts);
     nodeRPC: any;
     walletNodeRPC: any;
+    account: PandaAccount;
     accounts: IAccount[];
     bchNode: any;
     static readonly HDPath: string;
