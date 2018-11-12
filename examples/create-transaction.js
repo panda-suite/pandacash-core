@@ -17,14 +17,14 @@ const server = panda.server({
     });
 
     // rpc work only with the bcash format!
-    const unspentTxs = await pandaCashCore.walletNodeRPC.listunspent(0, 20, [ pandaCashCore.account.keyPairs[0].bcash.address ]);
+    const unspentTxs = await pandaCashCore.walletNodeRPC.listunspent(0, 20, [ pandaCashCore.account.keyPairs[0].cash.address ]);
 
     const _utxo = unspentTxs[0];
 
     const utxo = {
         'txid' : _utxo.txid,
         'vout' : _utxo.vout,
-        'address' : pandaCashCore.account.keyPairs[0].bcash.address,
+        'address' : pandaCashCore.account.keyPairs[0].cash.address,
         'script' : _utxo.scriptPubKey,
         'satoshis' : _utxo.amount * 1000000
     };
@@ -41,11 +41,11 @@ const server = panda.server({
     // It's the original amount - 1 sat/byte for tx size
     const remainder = originalAmount - satoshisToSend - 0.00001;
 
-    console.log(pandaCashCore.account.keyPairs[0].bcash);
+    console.log(pandaCashCore.account.keyPairs[0].cash);
 
     // add output w/ address and amount to send
-    transactionBuilder.addOutput(pandaCashCore.account.keyPairs[0].bcash.address, remainder);
-    transactionBuilder.addOutput(pandaCashCore.account.keyPairs[1].bcash.address, satoshisToSend);
+    transactionBuilder.addOutput(pandaCashCore.account.keyPairs[0].cash.address, remainder);
+    transactionBuilder.addOutput(pandaCashCore.account.keyPairs[1].cash.address, satoshisToSend);
     
     transactionBuilder.sign(
         0,

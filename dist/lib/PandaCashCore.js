@@ -62,7 +62,7 @@ var PandaCashCore = /** @class */ (function () {
         this.nodeRPC = (new bchjs_1.Web3BCH(new bchjs_1.HttpProvider("http://127.0.0.1:" + this.opts.port, 'panda', 'panda'))).rpc;
         this.walletNodeRPC = (new bchjs_1.Web3BCH(new bchjs_1.HttpProvider("http://127.0.0.1:" + this.opts.walletPort, 'panda', 'panda'))).rpc;
         this.account = new PandaAccount_1.default(this.opts.mnemonic, this.opts.totalAccounts, this.opts.network);
-        this.accounts = this.account.keyPairs.map(function (_) { return { address: _.cash.address, privateKeyWIF: _.cash.privateKey }; });
+        this.accounts = this.account.keyPairs.map(function (_) { return { address: _.cashAddress, privateKeyWIF: _.privateKey }; });
     }
     PandaCashCore.generateSeedMnemonic = function () {
         return BITBOX.Mnemonic.generate(128);
@@ -129,11 +129,11 @@ var PandaCashCore = /** @class */ (function () {
                         i = 0;
                         _a.label = 1;
                     case 1:
-                        if (!(i < this.accounts.length)) return [3 /*break*/, 5];
-                        return [4 /*yield*/, this.walletNodeRPC.importprivkey(this.accounts[i].privateKeyWIF)];
+                        if (!(i < this.account.keyPairs.length)) return [3 /*break*/, 5];
+                        return [4 /*yield*/, this.walletNodeRPC.importprivkey(this.account.keyPairs[i].privateKey)];
                     case 2:
                         _a.sent();
-                        return [4 /*yield*/, this.nodeRPC.generatetoaddress(10, this.accounts[i].address)];
+                        return [4 /*yield*/, this.nodeRPC.generatetoaddress(10, this.account.keyPairs[i].cashAddress)];
                     case 3:
                         _a.sent();
                         _a.label = 4;
@@ -142,7 +142,7 @@ var PandaCashCore = /** @class */ (function () {
                         return [3 /*break*/, 1];
                     case 5:
                         this.opts.enableLogs && console.log('Advancing blockchain to enable spending');
-                        return [4 /*yield*/, this.nodeRPC.generatetoaddress(500, this.accounts[0].address)];
+                        return [4 /*yield*/, this.nodeRPC.generatetoaddress(500, this.account.keyPairs[0].cashAddress)];
                     case 6:
                         _a.sent();
                         return [2 /*return*/];
@@ -150,34 +150,14 @@ var PandaCashCore = /** @class */ (function () {
             });
         });
     };
-    /**
-     * Starts the wrapper around the RPC commands
-     * We currently use the Bitbox implementation.
-    async function startApi() {
-      console.log('Starting BITBOX API at port 3000');
-  
-      const commands = [
-        "BITCOINCOM_BASEURL=http://localhost:3000/api/",
-        `RPC_BASEURL=http://localhost:${NODE_PORT}/`,
-        "RPC_PASSWORD=regtest",
-        "RPC_USERNAME=regtest",
-        "ZEROMQ_PORT=0",
-        "ZEROMQ_URL=0",
-        "NETWORK=local",
-        `node ${REST_APP}`
-      ];
-  
-      await exec(commands.join(" "));
-    }
-    */
     PandaCashCore.prototype.printPandaMessage = function (detailedVersion) {
         console.log("\n      " + detailedVersion + "\n\n      Available Accounts\n      ==================");
-        this.accounts.forEach(function (keyPair, i) {
-            console.log("      (" + i + ") " + keyPair.address);
+        this.account.keyPairs.forEach(function (keyPair, i) {
+            console.log("      (" + i + ") " + keyPair.cashAddress);
         });
         console.log("\n      Private Keys\n      ==================");
-        this.accounts.forEach(function (keyPair, i) {
-            console.log("      (" + i + ") " + keyPair.privateKeyWIF);
+        this.account.keyPairs.forEach(function (keyPair, i) {
+            console.log("      (" + i + ") " + keyPair.privateKey);
         });
         console.log("\n      HD Wallet\n      ==================\n      Mnemonic:      " + this.opts.mnemonic + "\n      Base HD Path:  " + PandaAccount_1.default.HDPath + "{account_index}\n\n      Network: " + this.opts.network + "\n      ==================\n      Bitcoin Cash Node Listening on http://localhost:" + this.opts.port + "\n      Bitcoin Cash Wallet Listening on http://localhost:" + this.opts.walletPort + "\n    ");
         /**

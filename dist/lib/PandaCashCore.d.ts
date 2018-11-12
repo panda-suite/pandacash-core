@@ -16,25 +16,5 @@ export default class PandaCashCore implements IPandaCashCore {
     startNode(): Promise<any>;
     nodeAvailable(): Promise<void>;
     seedAccounts(): Promise<void>;
-    /**
-     * Starts the wrapper around the RPC commands
-     * We currently use the Bitbox implementation.
-    async function startApi() {
-      console.log('Starting BITBOX API at port 3000');
-  
-      const commands = [
-        "BITCOINCOM_BASEURL=http://localhost:3000/api/",
-        `RPC_BASEURL=http://localhost:${NODE_PORT}/`,
-        "RPC_PASSWORD=regtest",
-        "RPC_USERNAME=regtest",
-        "ZEROMQ_PORT=0",
-        "ZEROMQ_URL=0",
-        "NETWORK=local",
-        `node ${REST_APP}`
-      ];
-  
-      await exec(commands.join(" "));
-    }
-    */
     printPandaMessage(detailedVersion: string): void;
 }

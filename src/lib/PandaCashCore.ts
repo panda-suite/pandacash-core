@@ -35,7 +35,7 @@ export default class PandaCashCore implements IPandaCashCore {
 
     this.account = new PandaAccount(this.opts.mnemonic, this.opts.totalAccounts, this.opts.network);
 
-    this.accounts = this.account.keyPairs.map(_ => { return { address: _.cash.address, privateKeyWIF: _.cash.privateKey }});
+    this.accounts = this.account.keyPairs.map(_ => { return { address: _.cashAddress, privateKeyWIF: _.privateKey }});
   }
 
   public nodeRPC: any;
@@ -86,37 +86,16 @@ export default class PandaCashCore implements IPandaCashCore {
   async seedAccounts() {
     this.opts.enableLogs && console.log('Seeding accounts');
 
-    for (let i = 0; i < this.accounts.length; i++) {
-      await this.walletNodeRPC.importprivkey(this.accounts[i].privateKeyWIF);
+    for (let i = 0; i < this.account.keyPairs.length; i++) {
+      await this.walletNodeRPC.importprivkey(this.account.keyPairs[i].privateKey);
 
-      await this.nodeRPC.generatetoaddress(10, this.accounts[i].address);
+      await this.nodeRPC.generatetoaddress(10, this.account.keyPairs[i].cashAddress);
     }
 
     this.opts.enableLogs && console.log('Advancing blockchain to enable spending');
 
-    await this.nodeRPC.generatetoaddress(500, this.accounts[0].address);
+    await this.nodeRPC.generatetoaddress(500, this.account.keyPairs[0].cashAddress);
   }
-
-  /**
-   * Starts the wrapper around the RPC commands
-   * We currently use the Bitbox implementation.
-  async function startApi() {
-    console.log('Starting BITBOX API at port 3000');
-
-    const commands = [
-      "BITCOINCOM_BASEURL=http://localhost:3000/api/",
-      `RPC_BASEURL=http://localhost:${NODE_PORT}/`,
-      "RPC_PASSWORD=regtest",
-      "RPC_USERNAME=regtest",
-      "ZEROMQ_PORT=0",
-      "ZEROMQ_URL=0",
-      "NETWORK=local",
-      `node ${REST_APP}`
-    ];
-
-    await exec(commands.join(" "));
-  }
-  */
 
   printPandaMessage(detailedVersion: string) {
     console.log(`
@@ -125,16 +104,16 @@ export default class PandaCashCore implements IPandaCashCore {
       Available Accounts
       ==================`);
 
-    this.accounts.forEach((keyPair, i) => {
-      console.log(`      (${i}) ${keyPair.address}`);
+    this.account.keyPairs.forEach((keyPair, i) => {
+      console.log(`      (${i}) ${keyPair.cashAddress}`);
     });
 
     console.log(`
       Private Keys
       ==================`);
 
-    this.accounts.forEach((keyPair, i) => {
-      console.log(`      (${i}) ${keyPair.privateKeyWIF}`);
+    this.account.keyPairs.forEach((keyPair, i) => {
+      console.log(`      (${i}) ${keyPair.privateKey}`);
     });
 
     console.log(`

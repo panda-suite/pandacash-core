@@ -5,12 +5,13 @@ const { HDPrivateKey } = hd;
 const BITBOXSDK = require('bitbox-sdk/lib/bitbox-sdk');
 const BITBOX = new BITBOXSDK.default();
 
-interface IKeypair {
-  address: string;
+interface IPandaKeyPair {
+  legacyAddress: string;
+  cashAddress: string;
   privateKey: string;
 }
 
-class PandaKeyPair {
+class PandaKeyPair implements IPandaKeyPair {
     constructor(mnemonic: string, HDPath: string, network?: "regtest" | "testnet") {
         network = "regtest";
         // cash
@@ -28,46 +29,19 @@ class PandaKeyPair {
         console.log(this.bcash);
         */
 
-        // bcash
         const privateKey = HDPrivateKey.fromPhrase(mnemonic);
 
         const deriveSomething = privateKey.derivePath(HDPath);
         const ring = KeyRing.fromPrivate(deriveSomething.privateKey);
 
-        this.cash = this.bcash = {
-          address: ring.getAddress('string', network),
-          privateKey: ring.toSecret(network)
-        };
-
-        this.legacy = this.standard = {
-          address: PandaKeyPair.convertToLegacyAddress(this.bcash.address, network),
-          privateKey: ring.toSecret(network)
-        };
-
-        // console.log(Address.fromCashAddr(this.bcash.address, "regtest").toBase58("regtest"));
-        // const legAdd = Address.fromCashAddr(this.bcash.address, "regtest").toBase58("regtest");
-        // console.log(Address.fromBase58(legAdd, "regtest").toCashAddr("testnet"))
-
-        // console.log("BCASH", this.bcash);
-        // console.log("CASH", this.cash);
-
-        /*
-         * testnet and regtest have the same prefixes in bitcoincashjs! 
-        
-      
-        const bchPrivateKey = new bch.PrivateKey(ring.getPrivateKey('hex'), "testnet");
-
-        this.standard = {
-          address: bchPrivateKey.toAddress().toString(),
-          privateKey: bchPrivateKey.toString()
-        };
- */
+        this.cashAddress = ring.getAddress('string', network);
+        this.legacyAddress = PandaKeyPair.convertToLegacyAddress(this.cashAddress, network);
+        this.privateKey = ring.toSecret(network);
     }
     
-    public legacy: IKeypair;
-    public cash: IKeypair;
-    public bcash: IKeypair;
-    public standard: IKeypair;
+    public cashAddress: string;
+    public legacyAddress: string;
+    public privateKey: string;
 
     static convertToCashAddress(legacyAddress: string, network?: "regtest" | "testnet") {
       return Address.fromBase58(legacyAddress, network).toCashAddr(network)

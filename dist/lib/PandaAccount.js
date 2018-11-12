@@ -22,34 +22,12 @@ var PandaKeyPair = /** @class */ (function () {
          
         console.log(this.bcash);
         */
-        // bcash
         var privateKey = HDPrivateKey.fromPhrase(mnemonic);
         var deriveSomething = privateKey.derivePath(HDPath);
         var ring = KeyRing.fromPrivate(deriveSomething.privateKey);
-        this.cash = this.bcash = {
-            address: ring.getAddress('string', network),
-            privateKey: ring.toSecret(network)
-        };
-        this.legacy = this.standard = {
-            address: PandaKeyPair.convertToLegacyAddress(this.bcash.address, network),
-            privateKey: ring.toSecret(network)
-        };
-        // console.log(Address.fromCashAddr(this.bcash.address, "regtest").toBase58("regtest"));
-        // const legAdd = Address.fromCashAddr(this.bcash.address, "regtest").toBase58("regtest");
-        // console.log(Address.fromBase58(legAdd, "regtest").toCashAddr("testnet"))
-        // console.log("BCASH", this.bcash);
-        // console.log("CASH", this.cash);
-        /*
-         * testnet and regtest have the same prefixes in bitcoincashjs!
-        
-      
-        const bchPrivateKey = new bch.PrivateKey(ring.getPrivateKey('hex'), "testnet");
-
-        this.standard = {
-          address: bchPrivateKey.toAddress().toString(),
-          privateKey: bchPrivateKey.toString()
-        };
- */
+        this.cashAddress = ring.getAddress('string', network);
+        this.legacyAddress = PandaKeyPair.convertToLegacyAddress(this.cashAddress, network);
+        this.privateKey = ring.toSecret(network);
     }
     PandaKeyPair.convertToCashAddress = function (legacyAddress, network) {
         return Address.fromBase58(legacyAddress, network).toCashAddr(network);

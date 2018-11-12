@@ -1,13 +1,13 @@
-interface IKeypair {
-    address: string;
+interface IPandaKeyPair {
+    legacyAddress: string;
+    cashAddress: string;
     privateKey: string;
 }
-declare class PandaKeyPair {
+declare class PandaKeyPair implements IPandaKeyPair {
     constructor(mnemonic: string, HDPath: string, network?: "regtest" | "testnet");
-    legacy: IKeypair;
-    cash: IKeypair;
-    bcash: IKeypair;
-    standard: IKeypair;
+    cashAddress: string;
+    legacyAddress: string;
+    privateKey: string;
     static convertToCashAddress(legacyAddress: string, network?: "regtest" | "testnet"): any;
     static convertToLegacyAddress(cashAddress: string, network?: "regtest" | "testnet"): any;
 }
