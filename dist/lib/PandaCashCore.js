@@ -59,8 +59,7 @@ var PandaCashCore = /** @class */ (function () {
             enableLogs: opts.enableLogs || false,
             debug: opts.debug || false,
         };
-        this.nodeRPC = (new bchjs_1.Web3BCH(new bchjs_1.HttpProvider("http://127.0.0.1:" + this.opts.port, 'panda', 'panda'))).rpc;
-        this.walletNodeRPC = (new bchjs_1.Web3BCH(new bchjs_1.HttpProvider("http://127.0.0.1:" + this.opts.walletPort, 'panda', 'panda'))).rpc;
+        this.bch = new bchjs_1.BCH(new bchjs_1.HttpProvider("http://127.0.0.1:" + this.opts.port, 'panda', 'panda'), new bchjs_1.HttpProvider("http://127.0.0.1:" + this.opts.walletPort, 'panda', 'panda')).rpc;
         this.account = new PandaAccount_1.default(this.opts.mnemonic, this.opts.totalAccounts, this.opts.network);
         this.accounts = this.account.keyPairs.map(function (_) { return { address: _.cashAddress, privateKeyWIF: _.privateKey }; });
     }
@@ -101,7 +100,7 @@ var PandaCashCore = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 5]);
-                        return [4 /*yield*/, this.nodeRPC.getblockchaininfo()];
+                        return [4 /*yield*/, this.bch.getblockchaininfo()];
                     case 1:
                         _a.sent();
                         return [3 /*break*/, 5];
@@ -130,10 +129,10 @@ var PandaCashCore = /** @class */ (function () {
                         _a.label = 1;
                     case 1:
                         if (!(i < this.account.keyPairs.length)) return [3 /*break*/, 5];
-                        return [4 /*yield*/, this.walletNodeRPC.importprivkey(this.account.keyPairs[i].privateKey)];
+                        return [4 /*yield*/, this.bch.importprivkey(this.account.keyPairs[i].privateKey)];
                     case 2:
                         _a.sent();
-                        return [4 /*yield*/, this.nodeRPC.generatetoaddress(10, this.account.keyPairs[i].cashAddress)];
+                        return [4 /*yield*/, this.bch.generatetoaddress(10, this.account.keyPairs[i].cashAddress)];
                     case 3:
                         _a.sent();
                         _a.label = 4;
@@ -142,7 +141,7 @@ var PandaCashCore = /** @class */ (function () {
                         return [3 /*break*/, 1];
                     case 5:
                         this.opts.enableLogs && console.log('Advancing blockchain to enable spending');
-                        return [4 /*yield*/, this.nodeRPC.generatetoaddress(500, this.account.keyPairs[0].cashAddress)];
+                        return [4 /*yield*/, this.bch.generatetoaddress(500, this.account.keyPairs[0].cashAddress)];
                     case 6:
                         _a.sent();
                         return [2 /*return*/];

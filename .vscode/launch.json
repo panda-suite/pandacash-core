@@ -17,6 +17,13 @@
             "name": "server-start",
             "program": "${workspaceFolder}/examples/server-start.js",
             "env": { }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "wallet-get-balance",
+            "program": "${workspaceFolder}/examples/wallet-get-balance.js",
+            "env": { }
         }
     ]
 }

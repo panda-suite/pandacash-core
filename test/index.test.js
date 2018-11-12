@@ -15,8 +15,8 @@ describe('index', () => {
             walletPort: 9082
         });
 
-        assert.equal(!!pandaCashCore.accounts, true);
-        assert.equal(!!pandaCashCore.nodeRPC, true);
-        assert.equal(!!pandaCashCore.walletNodeRPC, true);
+        assert.equal(!!pandaCashCore.account, true);
+        assert.equal(!!pandaCashCore.account.keyPairs, true);
+        assert.equal(!!pandaCashCore.bch, true);
     });
-  });
+});

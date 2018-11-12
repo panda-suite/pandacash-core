@@ -12,9 +12,7 @@ const server = panda.server({
     });
 
     console.log("Mnemonic: " + pandaCashCore.opts.mnemonic);
-    console.log("Account[0] public key (bcash format): " + pandaCashCore.account.keyPairs[0].cash.address);
-    console.log("Account[0] private key (bcash format): " + pandaCashCore.account.keyPairs[0].cash.privateKey);
-
-    console.log("Account[0] public key (standard format): " + pandaCashCore.account.keyPairs[0].legacy.address);
-    console.log("Account[0] private key (standard format): " + pandaCashCore.account.keyPairs[0].legacy.privateKey);
+    console.log("Account[0] public key (cash format): " + pandaCashCore.account.keyPairs[0].cashAddress);
+    console.log("Account[0] public key (legacy format): " + pandaCashCore.account.keyPairs[0].legacyAddress);
+    console.log("Account[0] private key: " + pandaCashCore.account.keyPairs[0].privateKey);
 })();

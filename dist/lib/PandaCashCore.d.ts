@@ -3,8 +3,7 @@ import { IAccount, IPandaCashCoreOpts, IPandaCashCore } from "../interfaces";
 export default class PandaCashCore implements IPandaCashCore {
     private opts;
     constructor(opts: IPandaCashCoreOpts);
-    nodeRPC: any;
-    walletNodeRPC: any;
+    bch: any;
     account: PandaAccount;
     accounts: IAccount[];
     bchNode: any;

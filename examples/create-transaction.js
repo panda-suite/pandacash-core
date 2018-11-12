@@ -14,7 +14,7 @@ const server = panda.server({
     });
 
     // rpc work only with the bcash format!
-    const unspentTxs = await pandaCashCore.walletNodeRPC.listunspent(0, 20, [ pandaCashCore.account.keyPairs[0].cashAddress ]);
+    const unspentTxs = await pandaCashCore.bch.listunspent(0, 20, [ pandaCashCore.account.keyPairs[0].cashAddress ]);
 
     const _utxo = unspentTxs[0];
 
@@ -36,11 +36,11 @@ const server = panda.server({
       .sign(privateKey);
     
     //console.log(transaction.toString());
-    const decoded = await pandaCashCore.nodeRPC.decoderawtransaction(transaction.toString());
+    const decoded = await pandaCashCore.bch.decoderawtransaction(transaction.toString());
 
-    const receipt = await pandaCashCore.nodeRPC.sendrawtransaction(transaction.toString());
+    const receipt = await pandaCashCore.bch.sendrawtransaction(transaction.toString());
 
-    await pandaCashCore.nodeRPC.generate(10);
+    await pandaCashCore.bch.generate(10);
     
     process.exit();
 })();

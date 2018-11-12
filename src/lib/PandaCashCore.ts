@@ -1,7 +1,8 @@
 const { hd, KeyRing } = require('bcash');
 const bchNode = require('./bchNode');
+
 import PandaAccount from "./PandaAccount";
-import { Web3BCH, HttpProvider } from "bchjs";
+import { BCH, HttpProvider } from "bchjs";
 import { IAccount, IPandaCashCoreOpts, IPandaCashCore } from "../interfaces";
 
 const sleep = (ms: number) => {
@@ -25,21 +26,17 @@ export default class PandaCashCore implements IPandaCashCore {
       debug: opts.debug || false,
     };
 
-    this.nodeRPC = (new Web3BCH(
-      new HttpProvider(`http://127.0.0.1:${this.opts.port}`, 'panda', 'panda')
-    )).rpc;
-
-    this.walletNodeRPC = (new Web3BCH(
+    this.bch = new BCH(
+      new HttpProvider(`http://127.0.0.1:${this.opts.port}`, 'panda', 'panda'),
       new HttpProvider(`http://127.0.0.1:${this.opts.walletPort}`, 'panda', 'panda')
-    )).rpc;
+    ).rpc;
 
     this.account = new PandaAccount(this.opts.mnemonic, this.opts.totalAccounts, this.opts.network);
 
     this.accounts = this.account.keyPairs.map(_ => { return { address: _.cashAddress, privateKeyWIF: _.privateKey }});
   }
 
-  public nodeRPC: any;
-  public walletNodeRPC: any;
+  public bch: any;
   public account: PandaAccount;
   public accounts: IAccount[] = [];
   public bchNode: any;
@@ -76,7 +73,7 @@ export default class PandaCashCore implements IPandaCashCore {
 
   async nodeAvailable() {
     try {
-      await this.nodeRPC.getblockchaininfo();
+      await this.bch.getblockchaininfo();
     } catch (e) {
       await sleep(500);
       await this.nodeAvailable();
@@ -86,15 +83,16 @@ export default class PandaCashCore implements IPandaCashCore {
   async seedAccounts() {
     this.opts.enableLogs && console.log('Seeding accounts');
 
-    for (let i = 0; i < this.account.keyPairs.length; i++) {
-      await this.walletNodeRPC.importprivkey(this.account.keyPairs[i].privateKey);
 
-      await this.nodeRPC.generatetoaddress(10, this.account.keyPairs[i].cashAddress);
+    for (let i = 0; i < this.account.keyPairs.length; i++) {
+      await this.bch.importprivkey(this.account.keyPairs[i].privateKey);
+
+      await this.bch.generatetoaddress(10, this.account.keyPairs[i].cashAddress);
     }
 
     this.opts.enableLogs && console.log('Advancing blockchain to enable spending');
 
-    await this.nodeRPC.generatetoaddress(500, this.account.keyPairs[0].cashAddress);
+    await this.bch.generatetoaddress(500, this.account.keyPairs[0].cashAddress);
   }
 
   printPandaMessage(detailedVersion: string) {
