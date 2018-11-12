@@ -50,6 +50,7 @@ export default class PandaCashCore implements IPandaCashCore {
  * http://bcoin.io/api-docs
  */
   async startNode() {
+    this.stopNode();
       // delete the pandacash
     this.opts.enableLogs && console.log('Starting Bitcoin Cash blockchain');
 
@@ -70,6 +71,10 @@ export default class PandaCashCore implements IPandaCashCore {
     await this.nodeAvailable();
 
     return this.bchNode;
+  }
+
+  public stopNode() {
+    delete this.bchNode;
   }
 
   async nodeAvailable() {

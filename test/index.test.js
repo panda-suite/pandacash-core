@@ -3,7 +3,7 @@ const panda = require("../dist/index");
 
 describe('index', () => {
     it('starts a server', async function () {
-        this.timeout(6000);
+        this.timeout(7000);
 
         const server = panda.server({
             seedAccounts: false,

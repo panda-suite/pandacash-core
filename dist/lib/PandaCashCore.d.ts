@@ -13,6 +13,7 @@ export default class PandaCashCore implements IPandaCashCore {
     * http://bcoin.io/api-docs
     */
     startNode(): Promise<any>;
+    stopNode(): void;
     nodeAvailable(): Promise<void>;
     seedAccounts(): Promise<void>;
     printPandaMessage(detailedVersion: string): void;

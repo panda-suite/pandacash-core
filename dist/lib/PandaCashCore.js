@@ -76,6 +76,7 @@ var PandaCashCore = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        this.stopNode();
                         // delete the pandacash
                         this.opts.enableLogs && console.log('Starting Bitcoin Cash blockchain');
                         return [4 /*yield*/, bchNode.startNode({
@@ -94,6 +95,9 @@ var PandaCashCore = /** @class */ (function () {
                 }
             });
         });
+    };
+    PandaCashCore.prototype.stopNode = function () {
+        delete this.bchNode;
     };
     PandaCashCore.prototype.nodeAvailable = function () {
         return __awaiter(this, void 0, void 0, function () {

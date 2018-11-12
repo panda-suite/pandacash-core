@@ -45,7 +45,7 @@ bcash_prefix_fix_1.fixPrefixes(bcash);
 // example: https://github.com/bcoin-org/bcash/blob/master/bin/node
 var startNode = function (opts) { return new Promise(function (resolve, reject) {
     if (node) {
-        return reject("Node is already initialized.");
+        return resolve(node);
     }
     var fullNodeOpts = {
         // only: "127.0.0.1",

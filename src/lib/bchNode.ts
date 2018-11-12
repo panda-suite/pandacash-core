@@ -12,7 +12,7 @@ fixPrefixes(bcash);
 // example: https://github.com/bcoin-org/bcash/blob/master/bin/node
 const startNode = (opts: IPandaCashCoreOpts) => new Promise((resolve, reject) => {
     if (node) {
-        return reject("Node is already initialized.");
+        return resolve(node);
     }
 
     const fullNodeOpts = {
