@@ -58,7 +58,7 @@ export default class PandaCashCore implements IPandaCashCore {
      * a) in the regtest mode
      * b) --prefix=${__dirname}/../.bcash
      */
-    const nodes = bchNode.startNode({
+    const nodes = await bchNode.startNode({
       debug: this.opts.debug,
       port: this.opts.port,
       walletPort: this.opts.walletPort,
@@ -68,6 +68,7 @@ export default class PandaCashCore implements IPandaCashCore {
     this.bchNode = nodes.node;
 
     await this.nodeAvailable();
+
     return this.bchNode;
   }
 
@@ -82,7 +83,6 @@ export default class PandaCashCore implements IPandaCashCore {
 
   async seedAccounts() {
     this.opts.enableLogs && console.log('Seeding accounts');
-
 
     for (let i = 0; i < this.account.keyPairs.length; i++) {
       await this.bch.importprivkey(this.account.keyPairs[i].privateKey);

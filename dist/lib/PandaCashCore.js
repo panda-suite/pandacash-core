@@ -78,15 +78,17 @@ var PandaCashCore = /** @class */ (function () {
                     case 0:
                         // delete the pandacash
                         this.opts.enableLogs && console.log('Starting Bitcoin Cash blockchain');
-                        nodes = bchNode.startNode({
-                            debug: this.opts.debug,
-                            port: this.opts.port,
-                            walletPort: this.opts.walletPort,
-                            network: this.opts.network
-                        });
+                        return [4 /*yield*/, bchNode.startNode({
+                                debug: this.opts.debug,
+                                port: this.opts.port,
+                                walletPort: this.opts.walletPort,
+                                network: this.opts.network
+                            })];
+                    case 1:
+                        nodes = _a.sent();
                         this.bchNode = nodes.node;
                         return [4 /*yield*/, this.nodeAvailable()];
-                    case 1:
+                    case 2:
                         _a.sent();
                         return [2 /*return*/, this.bchNode];
                 }

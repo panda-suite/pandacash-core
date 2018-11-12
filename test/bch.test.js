@@ -2,7 +2,7 @@ const assert = require("assert");
 const panda = require("../dist/index");
 
 describe('index', () => {
-    it('starts a server', async function () {
+    it('get balance', async function () {
         this.timeout(6000);
 
         const server = panda.server({
