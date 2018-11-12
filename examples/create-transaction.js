@@ -1,9 +1,6 @@
 const bch = require('bitcoincashjs');
 const panda = require("../dist/index");
 
-const BITBOXSDK = require('bitbox-sdk/lib/bitbox-sdk');
-const BITBOX = new BITBOXSDK.default();
-
 const server = panda.server({
     seedAccounts: true,
     enableLogs: false,
@@ -38,7 +35,12 @@ const server = panda.server({
       .to(pandaCashCore.account.keyPairs[0].legacyAddress, 15000)
       .sign(privateKey);
     
-    console.log(transaction.toString());
+    //console.log(transaction.toString());
+    const decoded = await pandaCashCore.nodeRPC.decoderawtransaction(transaction.toString());
 
+    const receipt = await pandaCashCore.nodeRPC.sendrawtransaction(transaction.toString());
+
+    await pandaCashCore.nodeRPC.generate(10);
+    
     process.exit();
 })();
