@@ -63,7 +63,7 @@ var startNode = function (opts) { return new Promise(function (resolve, reject) 
         // Start up a blockchain, mempool, and miner using in-memory
         // databases (stored in a red-black tree instead of on-disk).
         memory: true,
-        network: opts.network,
+        network: opts.network || "regtest",
         workers: true,
         listen: false,
         loader: require

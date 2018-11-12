@@ -35,11 +35,7 @@ export default class PandaCashCore implements IPandaCashCore {
 
     this.account = new PandaAccount(this.opts.mnemonic, this.opts.totalAccounts, this.opts.network);
 
-    this.accounts = this.account.keyPairs.map(_ => { return { address: _.cash.address, privateKeyWIF: _.cash.address }});
-  
-    console.log(this.accounts);
-
-    //PandaCashCore.generateSeedKeyPairs(this.opts.mnemonic, this.opts.totalAccounts);
+    this.accounts = this.account.keyPairs.map(_ => { return { address: _.cash.address, privateKeyWIF: _.cash.privateKey }});
   }
 
   public nodeRPC: any;
@@ -68,7 +64,8 @@ export default class PandaCashCore implements IPandaCashCore {
     const nodes = bchNode.startNode({
       debug: this.opts.debug,
       port: this.opts.port,
-      walletPort: this.opts.walletPort
+      walletPort: this.opts.walletPort,
+      network: this.opts.network
     });
 
     this.bchNode = nodes.node;

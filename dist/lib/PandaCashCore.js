@@ -62,9 +62,7 @@ var PandaCashCore = /** @class */ (function () {
         this.nodeRPC = (new bchjs_1.Web3BCH(new bchjs_1.HttpProvider("http://127.0.0.1:" + this.opts.port, 'panda', 'panda'))).rpc;
         this.walletNodeRPC = (new bchjs_1.Web3BCH(new bchjs_1.HttpProvider("http://127.0.0.1:" + this.opts.walletPort, 'panda', 'panda'))).rpc;
         this.account = new PandaAccount_1.default(this.opts.mnemonic, this.opts.totalAccounts, this.opts.network);
-        this.accounts = this.account.keyPairs.map(function (_) { return { address: _.cash.address, privateKeyWIF: _.cash.address }; });
-        console.log(this.accounts);
-        //PandaCashCore.generateSeedKeyPairs(this.opts.mnemonic, this.opts.totalAccounts);
+        this.accounts = this.account.keyPairs.map(function (_) { return { address: _.cash.address, privateKeyWIF: _.cash.privateKey }; });
     }
     PandaCashCore.generateSeedMnemonic = function () {
         return BITBOX.Mnemonic.generate(128);
@@ -84,7 +82,8 @@ var PandaCashCore = /** @class */ (function () {
                         nodes = bchNode.startNode({
                             debug: this.opts.debug,
                             port: this.opts.port,
-                            walletPort: this.opts.walletPort
+                            walletPort: this.opts.walletPort,
+                            network: this.opts.network
                         });
                         this.bchNode = nodes.node;
                         return [4 /*yield*/, this.nodeAvailable()];
