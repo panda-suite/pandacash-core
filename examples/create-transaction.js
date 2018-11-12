@@ -17,18 +17,30 @@ const server = panda.server({
     });
 
     // rpc work only with the bcash format!
-    const unspentTxs = await pandaCashCore.walletNodeRPC.listunspent(0, 20, [ pandaCashCore.account.keyPairs[0].cash.address ]);
+    const unspentTxs = await pandaCashCore.walletNodeRPC.listunspent(0, 20, [ pandaCashCore.account.keyPairs[0].cashAddress ]);
 
     const _utxo = unspentTxs[0];
 
     const utxo = {
-        'txid' : _utxo.txid,
-        'vout' : _utxo.vout,
-        'address' : pandaCashCore.account.keyPairs[0].cash.address,
+        'txId' : _utxo.txid,
+        'outputIndex' : _utxo.vout,
+        'address' : pandaCashCore.account.keyPairs[0].cashAddress,
         'script' : _utxo.scriptPubKey,
         'satoshis' : _utxo.amount * 1000000
     };
 
+    const bch = require('bitcoincashjs');
+
+    const privateKey = new bch.PrivateKey(pandaCashCore.account.keyPairs[0].privateKey);
+    console.log(pandaCashCore.account.keyPairs[0].legacyAddress);
+    const transaction = new bch.Transaction()
+      .from(utxo)
+      .to(pandaCashCore.account.keyPairs[0].legacyAddress, 15000)
+      .sign(privateKey);
+    
+    console.log(transaction.toString()) // 01000000018689302ea03ef...
+
+    /**
     const transactionBuilder = new BITBOX.TransactionBuilder("regtest");
 
     const satoshisToSend = 1000 // <--- This is where you set the amount to send.
@@ -61,6 +73,6 @@ const server = panda.server({
     const hex = tx.toHex()
 
     console.log(hex);
-
+         */
     process.exit();
 })();
