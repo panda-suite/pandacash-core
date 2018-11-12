@@ -37,14 +37,9 @@ const pandaCashCore = await server.listen({
 });
 
 console.log("Mnemonic: " + pandaCashCore.opts.mnemonic);
-
-// addresses compatible with bcash
-console.log("Account[0] public key (bcash format): " + pandaCashCore.account.keyPairs[0].bcash.address);
-console.log("Account[0] private key (bcash format): " + pandaCashCore.account.keyPairs[0].bcash.privateKey);
-
-// addresses compatible with bitcashjs and other libraries
-console.log("Account[0] public key (standard format): " + pandaCashCore.account.keyPairs[0].standard.address);
-console.log("Account[0] private key (standard format): " + pandaCashCore.account.keyPairs[0].standard.privateKey);
+console.log("Account[0] public key (cash format): " + pandaCashCore.account.keyPairs[0].cashAddress);
+console.log("Account[0] public key (legacy format): " + pandaCashCore.account.keyPairs[0].legacyAddress);
+console.log("Account[0] private key: " + pandaCashCore.account.keyPairs[0].privateKey);
 ```
 
 **In Jasmine/Mocha tests**
@@ -73,20 +68,66 @@ beforeAll(done => {
 ```
 
 ## Pandacash and bch.js
-[`bch.js`](https://github.com/panda-suite/bchjs) can be added to your application or tests, and be used accordingly. It can be configured to connect to any node such as the pandacash local blockchain.
+[bch.js](https://www.npmjs.com/package/bchjs) is a lightweight RPC client for Bitcoin Cash. Panda is fully integrated with `bchjs`. An instance of the library is exposed under `pandacashCore.bch`.
 
+### RPC Calls
 ```javascript
 const panda = require("pandacash-core");
-const { Web3BCH, HttpProvider } = require('bchjs');
 
 const server = panda.server();
 
-await server.listen({ port: 48334, walletPort: 48335 });
+const pandacashCore = await server.listen({ port: 48334, walletPort: 48335 });
 
-const web3bchNode = new Web3BCH(new HttpProvider('http://localhost:48334'));
-const web3bchWallet = new Web3BCH(new HttpProvider('http://localhost:48335'));
+const blockchainInfo = await pandacashCore.bch.getblockchaininfo();
 
-await web3bchNode.rpc.getblockchaininfo();
+console.log(blockchainInfo);
+```
+
+### Creating a test transaction
+```javascript
+const pandaCashCore = await server.listen({
+    port: 8081,
+    walletPort: 8082
+});
+
+// bch rpc works only with the bcash format!
+// find full documentation here: https://www.npmjs.com/package/bchjs
+const unspentTxs = await pandaCashCore.bch.listunspent(0, 20, [ pandaCashCore.account.keyPairs[0].cashAddress ]);
+
+const _utxo = unspentTxs[0];
+console.log(_utxo);
+/*
+    {
+        txid: 'a5872579aec7e509f17461e19d3d94c52ef29eceb2ba2116e6c5db164d3d0a57',
+        vout: 0,
+        address: 'bchreg:qzhv7vkn72wd5egeum0su9jjkjzv6q70zg83rchfz5',
+        account: 'default',
+        scriptPubKey: '76a914aecf32d3f29cda6519e6df0e1652b484cd03cf1288ac',
+        amount: 25,
+        confirmations: 20,
+        spendable: true,
+        solvable: true
+    }
+*/
+
+const utxo = {
+    'txId' : _utxo.txid,
+    'outputIndex' : _utxo.vout,
+    'address' : pandaCashCore.account.keyPairs[0].legacyAddress,
+    'script' : _utxo.scriptPubKey,
+    'satoshis' : _utxo.amount * 1000000
+};
+
+bch.Networks.enableRegtest();
+
+const privateKey = new bch.PrivateKey(pandaCashCore.account.keyPairs[0].privateKey, "regtest");
+
+const transaction = new bch.Transaction()
+  .from(utxo)
+  .to(pandaCashCore.account.keyPairs[0].legacyAddress, 15000)
+  .sign(privateKey);
+
+console.log(transaction.toString());
 ```
 
 ## Under the hood
@@ -94,7 +135,7 @@ PandaCash consists of the following components:
 * bcash implementation of bitcoin cash node in regtest mode
   * Doesn't sync with other Bitcoin nodes, and immediately creates new blocks on every transaction.
 * Prefunded addresses
-  * 10 addresses with 62.5 spendable BCH each, generated from a random mnemonic.
+  * 10 addresses with 50 spendable BCH each, generated from a random mnemonic.
 
 # Licence
 Copyright 2018 Panda Suite
