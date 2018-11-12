@@ -20,7 +20,6 @@ export interface IPandaServerPorts {
     walletPort: number;
     port: number;
 }
-
 export interface IPandaServer {
     listen: (ports: IPandaServerPorts, cb: (err: any, panda: IPandaCashCore) => void) => void
 }

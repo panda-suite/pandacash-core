@@ -1,10 +1,10 @@
 export interface IPandaCashCoreOpts {
-    mnemonic: string;
-    totalAccounts: number;
+    mnemonic?: string;
+    totalAccounts?: number;
     port: number;
     walletPort: number;
-    enableLogs: boolean;
-    debug: boolean;
+    enableLogs?: boolean;
+    debug?: boolean;
 }
 export interface IPandaCashCore {
 }

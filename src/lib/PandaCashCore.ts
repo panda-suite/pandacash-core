@@ -1,5 +1,6 @@
 const { hd, KeyRing } = require('bcash');
 const bchNode = require('./bchNode');
+
 import PandaAccount from "./PandaAccount";
 import { Web3BCH, HttpProvider } from "bchjs";
 import { IAccount, IPandaCashCoreOpts, IPandaCashCore } from "../interfaces";
@@ -24,21 +25,18 @@ export default class PandaCashCore implements IPandaCashCore {
       debug: opts.debug || false,
     };
 
-    this.nodeRPC = (new Web3BCH(
-      new HttpProvider(`http://127.0.0.1:${this.opts.port}`, 'regtest', 'regtest')
-    )).rpc;
-
-    this.walletNodeRPC = (new Web3BCH(
+    this.bch = new BCH(
+      new HttpProvider(`http://127.0.0.1:${this.opts.port}`, 'regtest', 'regtest'),
       new HttpProvider(`http://127.0.0.1:${this.opts.walletPort}`, 'regtest', 'regtest')
-    )).rpc;
+    ).rpc;
+
 
     this.account = new PandaAccount(this.opts.mnemonic, this.opts.totalAccounts);
 
     this.accounts = PandaCashCore.generateSeedKeyPairs(this.opts.mnemonic, this.opts.totalAccounts);
   }
 
-  public nodeRPC: any;
-  public walletNodeRPC: any;
+  public bch: any;
   public account: PandaAccount;
   public accounts: IAccount[] = [];
   public bchNode: any;
@@ -97,7 +95,7 @@ export default class PandaCashCore implements IPandaCashCore {
 
   async nodeAvailable() {
     try {
-      await this.nodeRPC.getblockchaininfo();
+      await this.bch.getblockchaininfo();
     } catch (e) {
       await sleep(500);
       await this.nodeAvailable();
@@ -108,14 +106,14 @@ export default class PandaCashCore implements IPandaCashCore {
     this.opts.enableLogs && console.log('Seeding accounts');
 
     for (let i = 0; i < this.accounts.length; i++) {
-      await this.walletNodeRPC.importprivkey(this.accounts[i].privateKeyWIF);
+      await this.bch.importprivkey(this.accounts[i].privateKeyWIF);
 
-      await this.nodeRPC.generatetoaddress(10, this.accounts[i].address);
+      await this.bch.generatetoaddress(10, this.accounts[i].address);
     }
 
     this.opts.enableLogs && console.log('Advancing blockchain to enable spending');
 
-    await this.nodeRPC.generatetoaddress(500, this.accounts[0].address);
+    await this.bch.generatetoaddress(500, this.accounts[0].address);
   }
 
   /**

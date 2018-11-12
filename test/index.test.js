@@ -16,7 +16,6 @@ describe('index', () => {
         });
 
         assert.equal(!!pandaCashCore.accounts, true);
-        assert.equal(!!pandaCashCore.nodeRPC, true);
-        assert.equal(!!pandaCashCore.walletNodeRPC, true);
+        assert.equal(!!pandaCashCore.bch, true);
     });
-  });
+});

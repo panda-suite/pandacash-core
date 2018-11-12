@@ -13,7 +13,7 @@ const server = panda.server({
         walletPort: 8082
     });
 
-    const balance = await pandaCashCore.walletNodeRPC.getbalance();
+    const balance = await pandaCashCore.bch.getbalance();
 
     console.log(balance);
 

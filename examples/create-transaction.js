@@ -14,7 +14,7 @@ const server = panda.server({
     });
 
     // rpc work only with the bcash format!
-    const unspentTxs = await pandaCashCore.walletNodeRPC.listunspent(0, 20, [ pandaCashCore.account.keyPairs[0].bcash.address ]);
+    const unspentTxs = await pandaCashCore.bch.listunspent(0, 20, [ pandaCashCore.account.keyPairs[0].bcash.address ]);
 
     const _utxo = unspentTxs[0];
 
