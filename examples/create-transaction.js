@@ -31,7 +31,7 @@ const server = panda.server({
 
     bch.Networks.enableRegtest();
 
-    const privateKey = new bch.PrivateKey(pandaCashCore.account.keyPairs[0].privateKey);
+    const privateKey = new bch.PrivateKey(pandaCashCore.account.keyPairs[0].privateKey, "regtest");
     console.log(pandaCashCore.account.keyPairs[0].legacyAddress);
     const transaction = new bch.Transaction()
       .from(utxo)
