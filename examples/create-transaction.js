@@ -24,7 +24,7 @@ const server = panda.server({
     const utxo = {
         'txId' : _utxo.txid,
         'outputIndex' : _utxo.vout,
-        'address' : pandaCashCore.account.keyPairs[0].cashAddress,
+        'address' : pandaCashCore.account.keyPairs[0].legacyAddress,
         'script' : _utxo.scriptPubKey,
         'satoshis' : _utxo.amount * 1000000
     };
