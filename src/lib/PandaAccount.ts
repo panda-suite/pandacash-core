@@ -2,8 +2,8 @@ const bch = require('bitcoincashjs');
 const { hd, KeyRing, Address } = require('bcash');
 const { HDPrivateKey } = hd;
 
-const BITBOXSDK = require('bitbox-sdk/lib/bitbox-sdk');
-const BITBOX = new BITBOXSDK.default();
+//const BITBOXSDK = require('bitbox-sdk/lib/bitbox-sdk');
+//const BITBOX = new BITBOXSDK.default();
 
 interface IPandaKeyPair {
   legacyAddress: string;

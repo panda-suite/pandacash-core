@@ -48,7 +48,7 @@
   "homepage": "https://github.com/panda-suite/pandacash-core#readme",
   "dependencies": {
     "bcash": "^1.0.2",
-    "bchjs": "git+https://github.com/panda-suite/bchjs.git",
+    "bchjs": "0.1.0-alpha.3",
     "bitbox-sdk": "^2.1.1"
   },
   "devDependencies": {

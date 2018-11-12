@@ -1,5 +1,4 @@
 # Pandacash Core
-
 This is the core code that powers the Pandacash application and the the Pandacash command line tool - [`pandacash-cli`](https://github.com/panda-suite/pandacash-cli).
 
 ## Prerequisites
