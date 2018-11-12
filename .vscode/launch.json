@@ -4,12 +4,18 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
         {
             "type": "node",
             "request": "launch",
-            "name": "send-transaction",
-            "program": "${workspaceFolder}/examples/send-transaction.js",
+            "name": "create-transaction",
+            "program": "${workspaceFolder}/examples/create-transaction.js",
+            "env": { }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "server-start",
+            "program": "${workspaceFolder}/examples/server-start.js",
             "env": { }
         }
     ]

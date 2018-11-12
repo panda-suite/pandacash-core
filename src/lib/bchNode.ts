@@ -1,12 +1,13 @@
 import { IPandaCashCoreOpts } from "../interfaces";
-
+import { fixPrefixes } from "./bcash-prefix-fix";
 const bcash = require('bcash');
 const walletPlugin = require('bcash/lib/wallet/plugin');
-
 type FullNode = any;
 const FullNode = bcash.FullNode;
 
 let node: FullNode;
+
+fixPrefixes(bcash);
 
 // example: https://github.com/bcoin-org/bcash/blob/master/bin/node
 const startNode = (opts: IPandaCashCoreOpts) => new Promise((resolve, reject) => {
@@ -15,6 +16,7 @@ const startNode = (opts: IPandaCashCoreOpts) => new Promise((resolve, reject) =>
     }
 
     const fullNodeOpts = {
+        // only: "127.0.0.1",
         file: true,
         argv: true,
         // port for the RPC server
@@ -29,7 +31,7 @@ const startNode = (opts: IPandaCashCoreOpts) => new Promise((resolve, reject) =>
         // Start up a blockchain, mempool, and miner using in-memory
         // databases (stored in a red-black tree instead of on-disk).
         memory: true,
-        network: "regtest",
+        network: opts.network,
         workers: true,
         listen: false,
         loader: require

@@ -1,4 +1,5 @@
 export interface IPandaCashCoreOpts {
+    network: "testnet" | "regtest";
     mnemonic: string;
     totalAccounts: number;
     port: number;

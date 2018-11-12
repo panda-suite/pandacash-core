@@ -12,7 +12,7 @@ const server = panda.server({
         walletPort: 8082
     });
 
-    const unspentTxs = await pandaCashCore.walletNodeRPC.listunspent(0, 20, [ pandaCashCore.account.keyPairs[0].bcash.address ]);
+    const unspentTxs = await pandaCashCore.walletNodeRPC.listunspent(0, 1, [ pandaCashCore.account.keyPairs[1].bcash.address ]);
 
     console.log(unspentTxs);
 

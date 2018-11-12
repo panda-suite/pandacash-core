@@ -51,6 +51,7 @@ var PandaCashCore = /** @class */ (function () {
         this.opts = opts;
         this.accounts = [];
         this.opts = {
+            network: opts.network || "regtest",
             mnemonic: opts.mnemonic || PandaCashCore.generateSeedMnemonic(),
             totalAccounts: opts.totalAccounts || 10,
             port: opts.port || 48332,
@@ -58,33 +59,13 @@ var PandaCashCore = /** @class */ (function () {
             enableLogs: opts.enableLogs || false,
             debug: opts.debug || false,
         };
-        this.nodeRPC = (new bchjs_1.Web3BCH(new bchjs_1.HttpProvider("http://127.0.0.1:" + this.opts.port, 'regtest', 'regtest'))).rpc;
-        this.walletNodeRPC = (new bchjs_1.Web3BCH(new bchjs_1.HttpProvider("http://127.0.0.1:" + this.opts.walletPort, 'regtest', 'regtest'))).rpc;
-        this.account = new PandaAccount_1.default(this.opts.mnemonic, this.opts.totalAccounts);
-        this.accounts = PandaCashCore.generateSeedKeyPairs(this.opts.mnemonic, this.opts.totalAccounts);
+        this.nodeRPC = (new bchjs_1.Web3BCH(new bchjs_1.HttpProvider("http://127.0.0.1:" + this.opts.port, 'panda', 'panda'))).rpc;
+        this.walletNodeRPC = (new bchjs_1.Web3BCH(new bchjs_1.HttpProvider("http://127.0.0.1:" + this.opts.walletPort, 'panda', 'panda'))).rpc;
+        this.account = new PandaAccount_1.default(this.opts.mnemonic, this.opts.totalAccounts, this.opts.network);
+        this.accounts = this.account.keyPairs.map(function (_) { return { address: _.cash.address, privateKeyWIF: _.cash.address }; });
+        console.log(this.accounts);
+        //PandaCashCore.generateSeedKeyPairs(this.opts.mnemonic, this.opts.totalAccounts);
     }
-    Object.defineProperty(PandaCashCore, "HDPath", {
-        get: function () {
-            return "m/44'/1/0/0/";
-        },
-        enumerable: true,
-        configurable: true
-    });
-    PandaCashCore.generateSeedKeyPairs = function (mnemonic, totalAccounts) {
-        var accounts = [];
-        var HDPrivateKey = hd.HDPrivateKey;
-        var privateKey = HDPrivateKey.fromPhrase(mnemonic);
-        for (var index = 0; index < totalAccounts; index++) {
-            var deriveSomething = privateKey.derivePath(PandaCashCore.HDPath + index);
-            var ring = KeyRing.fromPrivate(deriveSomething.privateKey);
-            var account = {
-                address: ring.getAddress('string', 'regtest'),
-                privateKeyWIF: ring.toSecret('regtest')
-            };
-            accounts.push(account);
-        }
-        return accounts;
-    };
     PandaCashCore.generateSeedMnemonic = function () {
         return BITBOX.Mnemonic.generate(128);
     };
@@ -199,7 +180,7 @@ var PandaCashCore = /** @class */ (function () {
         this.accounts.forEach(function (keyPair, i) {
             console.log("      (" + i + ") " + keyPair.privateKeyWIF);
         });
-        console.log("\n      HD Wallet\n      ==================\n      Mnemonic:      " + this.opts.mnemonic + "\n      Base HD Path:  " + PandaCashCore.HDPath + "{account_index}\n\n      Bitcoin Cash Node Listening on http://localhost:" + this.opts.port + "\n      Bitcoin Cash Wallet Listening on http://localhost:" + this.opts.walletPort + "\n    ");
+        console.log("\n      HD Wallet\n      ==================\n      Mnemonic:      " + this.opts.mnemonic + "\n      Base HD Path:  " + PandaAccount_1.default.HDPath + "{account_index}\n\n      Network: " + this.opts.network + "\n      ==================\n      Bitcoin Cash Node Listening on http://localhost:" + this.opts.port + "\n      Bitcoin Cash Wallet Listening on http://localhost:" + this.opts.walletPort + "\n    ");
         /**
          * BITBOX API running at http://localhost:3000/v1/
          * BITBOX API Docs running at http://localhost:3000/

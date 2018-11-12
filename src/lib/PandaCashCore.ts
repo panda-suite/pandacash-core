@@ -16,6 +16,7 @@ const BITBOX = new BITBOXSDK.default();
 export default class PandaCashCore implements IPandaCashCore {
   constructor(private opts: IPandaCashCoreOpts) {
     this.opts = {
+      network: opts.network || "regtest",
       mnemonic: opts.mnemonic || PandaCashCore.generateSeedMnemonic(),
       totalAccounts: opts.totalAccounts || 10,
       port: opts.port || 48332,
@@ -25,16 +26,20 @@ export default class PandaCashCore implements IPandaCashCore {
     };
 
     this.nodeRPC = (new Web3BCH(
-      new HttpProvider(`http://127.0.0.1:${this.opts.port}`, 'regtest', 'regtest')
+      new HttpProvider(`http://127.0.0.1:${this.opts.port}`, 'panda', 'panda')
     )).rpc;
 
     this.walletNodeRPC = (new Web3BCH(
-      new HttpProvider(`http://127.0.0.1:${this.opts.walletPort}`, 'regtest', 'regtest')
+      new HttpProvider(`http://127.0.0.1:${this.opts.walletPort}`, 'panda', 'panda')
     )).rpc;
 
-    this.account = new PandaAccount(this.opts.mnemonic, this.opts.totalAccounts);
+    this.account = new PandaAccount(this.opts.mnemonic, this.opts.totalAccounts, this.opts.network);
 
-    this.accounts = PandaCashCore.generateSeedKeyPairs(this.opts.mnemonic, this.opts.totalAccounts);
+    this.accounts = this.account.keyPairs.map(_ => { return { address: _.cash.address, privateKeyWIF: _.cash.address }});
+  
+    console.log(this.accounts);
+
+    //PandaCashCore.generateSeedKeyPairs(this.opts.mnemonic, this.opts.totalAccounts);
   }
 
   public nodeRPC: any;
@@ -42,29 +47,6 @@ export default class PandaCashCore implements IPandaCashCore {
   public account: PandaAccount;
   public accounts: IAccount[] = [];
   public bchNode: any;
-
-  static get HDPath() {
-    return "m/44'/1/0/0/";
-  }
-
-  static generateSeedKeyPairs(mnemonic: string, totalAccounts: number): IAccount[] {
-    const accounts: IAccount[] = [];
-    const { HDPrivateKey } = hd;
-    const privateKey = HDPrivateKey.fromPhrase(mnemonic);
-
-    for (var index = 0; index < totalAccounts; index++) {
-      const deriveSomething = privateKey.derivePath(PandaCashCore.HDPath + index);
-      const ring = KeyRing.fromPrivate(deriveSomething.privateKey);
-      const account: IAccount = {
-        address: ring.getAddress('string', 'regtest'),
-        privateKeyWIF: ring.toSecret('regtest')
-      };
-
-      accounts.push(account);
-    }
-
-    return accounts;
-  }
 
   static generateSeedMnemonic() : string {
     return BITBOX.Mnemonic.generate(128);
@@ -162,8 +144,10 @@ export default class PandaCashCore implements IPandaCashCore {
       HD Wallet
       ==================
       Mnemonic:      ${this.opts.mnemonic}
-      Base HD Path:  ${PandaCashCore.HDPath}{account_index}
+      Base HD Path:  ${PandaAccount.HDPath}{account_index}
 
+      Network: ${this.opts.network}
+      ==================
       Bitcoin Cash Node Listening on http://localhost:${this.opts.port}
       Bitcoin Cash Wallet Listening on http://localhost:${this.opts.walletPort}
     `);

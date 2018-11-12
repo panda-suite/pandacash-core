@@ -36,16 +36,19 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
+var bcash_prefix_fix_1 = require("./bcash-prefix-fix");
 var bcash = require('bcash');
 var walletPlugin = require('bcash/lib/wallet/plugin');
 var FullNode = bcash.FullNode;
 var node;
+bcash_prefix_fix_1.fixPrefixes(bcash);
 // example: https://github.com/bcoin-org/bcash/blob/master/bin/node
 var startNode = function (opts) { return new Promise(function (resolve, reject) {
     if (node) {
         return reject("Node is already initialized.");
     }
     var fullNodeOpts = {
+        // only: "127.0.0.1",
         file: true,
         argv: true,
         // port for the RPC server
@@ -60,7 +63,7 @@ var startNode = function (opts) { return new Promise(function (resolve, reject) 
         // Start up a blockchain, mempool, and miner using in-memory
         // databases (stored in a red-black tree instead of on-disk).
         memory: true,
-        network: "regtest",
+        network: opts.network,
         workers: true,
         listen: false,
         loader: require

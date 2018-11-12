@@ -8,8 +8,6 @@ export default class PandaCashCore implements IPandaCashCore {
     account: PandaAccount;
     accounts: IAccount[];
     bchNode: any;
-    static readonly HDPath: string;
-    static generateSeedKeyPairs(mnemonic: string, totalAccounts: number): IAccount[];
     static generateSeedMnemonic(): string;
     /**
     * We use the bcash implementation
