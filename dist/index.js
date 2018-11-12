@@ -68,18 +68,14 @@ exports.server = function (opts) {
     return {
         listen: function (portOpts, cb) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (typeof portOpts === "number") {
-                            opts.port = portOpts;
-                        }
-                        else {
-                            opts.port = portOpts.port;
-                            opts.walletPort = portOpts.walletPort;
-                        }
-                        return [4 /*yield*/, _listen(opts, cb)];
-                    case 1: return [2 /*return*/, _a.sent()];
+                if (typeof portOpts === "number") {
+                    opts.port = portOpts;
                 }
+                else {
+                    opts.port = portOpts.port;
+                    opts.walletPort = portOpts.walletPort;
+                }
+                return [2 /*return*/, _listen(opts, cb)];
             });
         }); }
     };

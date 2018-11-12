@@ -36,7 +36,7 @@ export const server = (opts: IPandaServerOpts) : IPandaServer => {
         opts.walletPort = portOpts.walletPort;
       }
 
-      return await _listen(opts, cb);
+      return _listen(opts, cb);
     }
   }
 };
