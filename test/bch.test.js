@@ -1,7 +1,7 @@
 const assert = require("assert");
 const panda = require("../dist/index");
 
-describe('index', () => {
+describe('RPC', () => {
     it('get balance', async function () {
         this.timeout(6000);
 

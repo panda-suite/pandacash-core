@@ -3,8 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var bch = require('bitcoincashjs');
 var _a = require('bcash'), hd = _a.hd, KeyRing = _a.KeyRing, Address = _a.Address;
 var HDPrivateKey = hd.HDPrivateKey;
-var BITBOXSDK = require('bitbox-sdk/lib/bitbox-sdk');
-var BITBOX = new BITBOXSDK.default();
 var PandaKeyPair = /** @class */ (function () {
     function PandaKeyPair(mnemonic, HDPath, network) {
         network = "regtest";
