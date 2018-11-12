@@ -29,7 +29,7 @@ const server = panda.server({
         'satoshis' : _utxo.amount * 1000000
     };
 
-    const bch = require('bitcoincashjs');
+    bch.Networks.enableRegtest();
 
     const privateKey = new bch.PrivateKey(pandaCashCore.account.keyPairs[0].privateKey);
     console.log(pandaCashCore.account.keyPairs[0].legacyAddress);
