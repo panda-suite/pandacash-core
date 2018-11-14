@@ -3,6 +3,10 @@
   "version": "0.3.0",
   "description": "Core code for pandacash",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/"
+  ],
   "scripts": {
     "mocha": "./node_modules/.bin/mocha",
     "test": "npm run build && npm run mocha",

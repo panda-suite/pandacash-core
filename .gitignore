@@ -1,3 +1,4 @@
-node_modules
+node_modules/
 .console_history
-.bcash
+.bcash/
+dist/
