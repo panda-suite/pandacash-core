@@ -1,8 +1,9 @@
 const panda = require("../dist/index");
 
 const server = panda.server({
-    enableLogs: false,
-    debug: true
+    enableLogs: true,
+    addressFormat: "legacy",
+    debug: false
 });
 
 (async () => {

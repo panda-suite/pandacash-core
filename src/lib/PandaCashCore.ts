@@ -3,7 +3,7 @@ const bchNode = require('./bchNode');
 
 import PandaAccount from "./PandaAccount";
 import { BCH, HttpProvider } from "bchjs";
-import { IAccount, IPandaCashCoreOpts, IPandaCashCore } from "../interfaces";
+import { IAccount, IPandaKeyPair, IPandaCashCoreOpts, IPandaCashCore } from "../interfaces";
 
 const sleep = (ms: number) => {
   return new Promise(resolve => {
@@ -17,6 +17,7 @@ const BITBOX = new BITBOXSDK.default();
 export default class PandaCashCore implements IPandaCashCore {
   constructor(private opts: IPandaCashCoreOpts) {
     this.opts = {
+      addressFormat: opts.addressFormat || "cash",
       network: opts.network || "regtest",
       mnemonic: opts.mnemonic || PandaCashCore.generateSeedMnemonic(),
       totalAccounts: opts.totalAccounts || 10,
@@ -100,6 +101,13 @@ export default class PandaCashCore implements IPandaCashCore {
     await this.bch.generatetoaddress(500, this.account.keyPairs[0].cashAddress);
   }
 
+  displayAddress(index: number, keyPair: IPandaKeyPair) {
+    const legacy = this.opts.addressFormat === "legacy" || this.opts.addressFormat === "both" ? `Legacy: ${keyPair.legacyAddress}`: '';
+    const cash = this.opts.addressFormat === "cash" || this.opts.addressFormat === "both" ? `Cash: ${keyPair.cashAddress}`: '';
+
+    console.log(`      (${index}) ${legacy}${legacy && cash ? " | " : ""}${cash}`);
+  }
+
   printPandaMessage(detailedVersion: string) {
     console.log(`
       ${detailedVersion}
@@ -107,9 +115,8 @@ export default class PandaCashCore implements IPandaCashCore {
       Available Accounts
       ==================`);
 
-    this.account.keyPairs.forEach((keyPair, i) => {
-      console.log(`      (${i}) ${keyPair.cashAddress}`);
-    });
+    this.account.keyPairs
+    .forEach((keyPair, index) => this.displayAddress(index, keyPair));
 
     console.log(`
       Private Keys

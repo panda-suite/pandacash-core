@@ -3,7 +3,7 @@ import { IPandaCashCoreOpts, IPandaServerOpts, IPandaServer } from "./interfaces
 
 const pkg = require('../package.json');
 
-const detailedVersion = `Pandacash CLI v${pkg.version}`;
+const detailedVersion = `Pandacash CLI (Core v${pkg.version})`;
 
 const _listen = async (opts: IPandaCashCoreOpts, cb: (err: any, panda: PandaCashCore) => void): Promise<PandaCashCore> => {
   const pandaCashCore = new PandaCashCore(opts);

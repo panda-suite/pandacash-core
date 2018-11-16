@@ -1,4 +1,5 @@
 export interface IPandaCashCoreOpts {
+    addressFormat: "cash" | "legacy" | "both";
     network: "testnet" | "regtest";
     mnemonic: string;
     totalAccounts: number;
@@ -15,6 +16,11 @@ export interface IAccount {
     privateKeyWIF: string;
 }
 
+export interface IPandaKeyPair {
+    legacyAddress: string;
+    cashAddress: string;
+    privateKey: string;
+}
 export interface IPandaServerOpts extends IPandaCashCoreOpts {}
 
 export interface IPandaServerPorts {

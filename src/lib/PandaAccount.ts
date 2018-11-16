@@ -1,15 +1,10 @@
 const bch = require('bitcoincashjs');
 const { hd, KeyRing, Address } = require('bcash');
 const { HDPrivateKey } = hd;
+import { IPandaKeyPair } from "../interfaces";
 
 //const BITBOXSDK = require('bitbox-sdk/lib/bitbox-sdk');
 //const BITBOX = new BITBOXSDK.default();
-
-interface IPandaKeyPair {
-  legacyAddress: string;
-  cashAddress: string;
-  privateKey: string;
-}
 
 class PandaKeyPair implements IPandaKeyPair {
     constructor(mnemonic: string, HDPath: string, network?: "regtest" | "testnet") {

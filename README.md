@@ -130,11 +130,8 @@ console.log(transaction.toString());
 ```
 
 ## Under the hood
-PandaCash consists of the following components:
-* bcash implementation of bitcoin cash node in regtest mode
-  * Doesn't sync with other Bitcoin nodes, and immediately creates new blocks on every transaction.
-* Prefunded addresses
-  * 10 addresses with 50 spendable BCH each, generated from a random mnemonic.
+Pandacash is powered by the bcash implementation of Bitcoin Cash.
+<img src="https://raw.githubusercontent.com/panda-suite/panda-suite.github.io/master/bcoin-logo-gradient-text.png" alt="bcash / bcoin blockchain" width="200">
 
 # Licence
 Copyright 2018 Panda Suite
