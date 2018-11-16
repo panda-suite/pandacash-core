@@ -1,6 +1,6 @@
 {
   "name": "pandacash-core",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Core code for pandacash",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

@@ -27,7 +27,9 @@ const server = panda.server({
     // will log in the console
     enableLogs: true,
     // will show logs from the bch node
-    debug: false
+    debug: false,
+    // options: "cash", "legacy", "both"
+    addressFormat: "both",
 });
 
 const pandaCashCore = await server.listen({
