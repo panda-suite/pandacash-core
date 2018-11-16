@@ -133,6 +133,7 @@ console.log(transaction.toString());
 
 ## Under the hood
 Pandacash is powered by the bcash implementation of Bitcoin Cash.
+
 <img src="https://raw.githubusercontent.com/panda-suite/panda-suite.github.io/master/bcoin-logo-gradient-text.png" alt="bcash / bcoin blockchain" width="200">
 
 # Licence
