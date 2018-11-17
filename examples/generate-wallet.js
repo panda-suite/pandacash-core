@@ -22,8 +22,8 @@ for (let i = 0; i < 2; i++) {
     childNode.addresses = BITBOX.HDNode.createAccount([external, internal]);
 
     const keys = {
-        address: BITBOX.HDNode.toCashAddress(childNode),
-        privateKey: BITBOX.HDNode.toWIF(childNode)
+        address: BITBOX.HDNode.toCashAddress(childNode, true),
+        privateKey: BITBOX.HDNode.toWIF(childNode, true)
     };
 
     console.log(keys);
