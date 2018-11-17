@@ -2,14 +2,15 @@ const panda = require("../dist/index");
 
 const server = panda.server({
     enableLogs: true,
-    addressFormat: "legacy",
-    debug: false
+    addressFormat: "both",
+    debug: false,
+    mnemonic: "fringe demise grab turkey retreat shy genuine alone pass social cable enhance"
 });
 
 (async () => {
     const pandaCashCore = await server.listen({
-        port: 8081,
-        walletPort: 8082
+        port: 48332,
+        walletPort: 48334
     });
 
     console.log("Mnemonic: " + pandaCashCore.opts.mnemonic);

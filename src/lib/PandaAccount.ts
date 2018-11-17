@@ -3,26 +3,9 @@ const { hd, KeyRing, Address } = require('bcash');
 const { HDPrivateKey } = hd;
 import { IPandaKeyPair } from "../interfaces";
 
-//const BITBOXSDK = require('bitbox-sdk/lib/bitbox-sdk');
-//const BITBOX = new BITBOXSDK.default();
-
 class PandaKeyPair implements IPandaKeyPair {
     constructor(mnemonic: string, HDPath: string, network?: "regtest" | "testnet") {
         network = "regtest";
-        // cash
-        /**
-        const rootSeed = BITBOX.Mnemonic.toSeed(mnemonic)
-        
-        const masterHDNode = BITBOX.HDNode.fromSeed(rootSeed, "regtest")
-        const childNode = masterHDNode.derivePath(`${HDPath}`)
-       
-        this.bcash = this.cash = {
-          address: BITBOX.HDNode.toCashAddress(childNode),
-          privateKey: BITBOX.HDNode.toWIF(childNode)
-        };
-         
-        console.log(this.bcash);
-        */
 
         const privateKey = HDPrivateKey.fromPhrase(mnemonic);
 
